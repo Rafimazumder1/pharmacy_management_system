@@ -1,0 +1,1 @@
+*.pharmacy_manegement_system filter=lfs diff=lfs merge=lfs -text

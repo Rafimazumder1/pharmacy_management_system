@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
+use App\Models\Medicine;
 
 // CACHE CLEAR
 Route::get('/clear', function () {
@@ -136,6 +137,9 @@ Route::group(['middleware' => ['local']], function () {
             Route::post('/customer/send-email/process', 'CustomerController@sendEmailProcess')->name('customer.send_email.process');
 
             // route for adding, showing list and editing shops
+          
+
+            // Routes for shop management
             Route::get('/shops', [ShopController::class, 'shops'])->name('shops');
             Route::get('/shop/list', [ShopController::class, 'index'])->name('shop.list');
             Route::get('/shop/add', [ShopController::class, 'add'])->name('shop.add');
@@ -143,7 +147,8 @@ Route::group(['middleware' => ['local']], function () {
             Route::get('/shop/edit/{id}', [ShopController::class, 'edit'])->name('shop.edit');
             Route::patch('/shop/update/{id}', [ShopController::class, 'update'])->name('shop.update');
             Route::get('/shop/view/{id}', [ShopController::class, 'view'])->name('shop.view');
-            Route::get('/shop/delete/{id}', [ShopController::class, 'delete'])->name('shop.delete');
+            Route::delete('/shop/{id}', [ShopController::class, 'delete'])->name('shop.delete');
+            
 
             // Route for getting districts based on the selected division
             Route::get('/get-districts/{division_id}', [ShopController::class, 'getDistricts'])->name('get-districts');
@@ -367,8 +372,26 @@ Route::get('order/invoice/{id}', 'Controller@viewCustomerInvoice')->name('view.c
 
 Route::get('/db-test', function () {
     try {
+        // Test the database connection
         DB::connection()->getPdo();
-        return 'Database connection is successful!';
+
+        // Fetch data from the Medicine table
+        $medicines = Medicine::all();
+
+        // Return data or a message if no data is found
+        if ($medicines->isEmpty()) {
+            return 'No data found in the Medicine table.';
+        }
+
+        // Format data as a simple HTML table for display
+        $output = '<h1>Medicines Data</h1><table border="1"><thead><tr><th>ID</th><th>Name</th><th>Description</th><th>Price</th></tr></thead><tbody>';
+        foreach ($medicines as $medicine) {
+            $output .= "<tr><td>{$medicine->id}</td><td>{$medicine->name}</td><td>{$medicine->description}</td><td>{$medicine->price}</td></tr>";
+        }
+        $output .= '</tbody></table>';
+
+        return $output;
+
     } catch (\Exception $e) {
         return 'Database connection failed: ' . $e->getMessage();
     }

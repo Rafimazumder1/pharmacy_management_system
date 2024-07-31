@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Upazila extends Model
 {
-   
+    protected $table = 'UPAZILLA';
     public function unions()
     {
         return $this->hasMany(Union::class);

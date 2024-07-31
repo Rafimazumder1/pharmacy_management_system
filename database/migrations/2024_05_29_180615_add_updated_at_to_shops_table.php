@@ -14,7 +14,10 @@ class AddUpdatedAtToShopsTable extends Migration
     public function up()
     {
         Schema::table('shops', function (Blueprint $table) {
-            $table->timestamp('updated_at')->nullable();
+            // Check if the column exists before adding it
+            if (!Schema::hasColumn('shops', 'updated_at')) {
+                $table->timestamp('updated_at')->nullable();
+            }
         });
     }
 
@@ -26,7 +29,9 @@ class AddUpdatedAtToShopsTable extends Migration
     public function down()
     {
         Schema::table('shops', function (Blueprint $table) {
-            $table->dropColumn('updated_at');
+            if (Schema::hasColumn('shops', 'updated_at')) {
+                $table->dropColumn('updated_at');
+            }
         });
     }
 }

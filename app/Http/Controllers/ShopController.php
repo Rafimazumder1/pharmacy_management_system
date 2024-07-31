@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\District;
 use App\Models\Division;
+use App\Models\Upazila;
 use App\Models\Shop;
 use Illuminate\Http\Request;
 
@@ -11,7 +12,9 @@ class ShopController extends Controller
     public function add()
     {
         $divisions = Division::all();
-        return view('shop.add', compact('divisions'));
+        $upzila = Upazila::all();
+        $divisions = Division::all();
+        return view('shop.add', compact('divisions','upzila'));
     }
 
     public function store(Request $request)
@@ -37,8 +40,10 @@ class ShopController extends Controller
     public function shops()
     {
         $divisions = Division::all();
+        $dd = District::all();
+        $upzila = Upazila::all();
         $shops = Shop::all();
-        return view('shop.shops', compact('divisions', 'shops'));
+        return view('shop.shops', compact('divisions','dd', 'upzila','shops'));
     }
     public function index(Request $request)
     {
@@ -116,5 +121,11 @@ class ShopController extends Controller
         $districts = District::where('division_id', $division_id)->get();
         return response()->json($districts);
     }
-
+    public function delete($id)
+    {
+        $shop = Shop::findOrFail($id);
+        $shop->delete();
+    
+        return redirect()->route('shop.list')->with('success', 'Shop deleted successfully');
+    }
 }

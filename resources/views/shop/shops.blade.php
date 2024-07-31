@@ -40,11 +40,15 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <!-- District -->
+                            
+                        <!-- District -->
                             <div class="mb-3">
                                 <label for="district" class="form-label">District</label>
                                 <select class="form-control" id="district" name="district" required>
                                     <option value="">Select District</option>
+                                    @foreach ($dd as $div)
+                                    <option value="{{ $div->id }}">{{ $div->name }}</option>
+                                @endforeach
                                 </select>
                             </div>
                             <!-- Upazilla -->
@@ -52,6 +56,9 @@
                                 <label for="upazilla" class="form-label">Upazilla</label>
                                 <select class="form-control" id="upazilla" name="upazilla" required>
                                     <option value="">Select Upazilla</option>
+                                    @foreach ($upzila as $upzillas)
+                                    <option value="{{ $upzillas->id }}">{{ $upzillas->name }}</option>
+                                @endforeach
                                 </select>
                             </div>
                             <div class="mb-3">

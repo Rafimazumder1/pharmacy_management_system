@@ -47,6 +47,8 @@ class SupplierController extends Controller
             $customer->shop_id = Auth::user()->shop_id;
             $customer->upazilla_id = Auth::user()->shop->upazilla_id;
             $customer->thana_id = Auth::user()->shop->thana_id;
+// dd($customer);
+
             if ($customer->save()) {
                 Toastr::success('Supplier successfully created', '', ['progressBar' => true, 'closeButton' => true, 'positionClass' => 'toast-top-right']);
                 return redirect()->route('supplier.list');

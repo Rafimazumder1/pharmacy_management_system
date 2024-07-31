@@ -41,11 +41,15 @@
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </div>
-                            <!-- District -->
+                            
+                        <!-- District -->
                             <div class="mb-3">
                                 <label for="district" class="form-label">District</label>
                                 <select class="form-control" id="district" name="district" required>
                                     <option value="">Select District</option>
+                                    <?php $__currentLoopData = $dd; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $div): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($div->id); ?>"><?php echo e($div->name); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </div>
                             <!-- Upazilla -->
@@ -53,6 +57,9 @@
                                 <label for="upazilla" class="form-label">Upazilla</label>
                                 <select class="form-control" id="upazilla" name="upazilla" required>
                                     <option value="">Select Upazilla</option>
+                                    <?php $__currentLoopData = $upzila; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $upzillas): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($upzillas->id); ?>"><?php echo e($upzillas->name); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </div>
                             <div class="mb-3">

@@ -30,25 +30,27 @@
                         @foreach ($shops as $shop)
                             <tr>
                                 <td>{{ $shop->id }}</td>
-                                <td>{{ $shop->image }}</td>
+                                <td><img src="{{ asset('storage/images/shops/' . $shop->image) }}" alt="Image" width="50"></td>
                                 <td>{{ $shop->name }}</td>
                                 <td>{{ $shop->next_pay }}</td>
                                 <td>{{ $shop->phone }}</td>
-                                <td>{{ $shop->site_logo }}</td>
+                                <td><img src="{{ asset('storage/images/shops/' . $shop->site_logo) }}" alt="Site Logo" width="50"></td>
                                 <td>{{ $shop->site_title }}</td>
                                 <td>{{ $shop->status }}</td>
                                 <td>{{ $shop->upazilla_id }}</td>
                                 <td>{{ $shop->username }}</td>
                                 <td>
-                                    <button class="btn btn-primary">
-                                        <a href="{{ route('shop.edit', $shop->id) }}"
-                                            style="text-decoration: none; color:white;">Edit</a>
-                                    </button>
-                                    <button class="btn btn-danger">
-                                        <a onclick="return confirm('Are you sure?')"
-                                            href="{{ route('shop.delete', $shop->id) }}"
-                                            style="text-decoration: none; color:white;">Delete</a>
-                                    </button>
+                                    <!-- Edit Button -->
+                                    <a href="{{ route('shop.edit', $shop->id) }}" class="btn btn-primary">
+                                        Edit
+                                    </a>
+
+                                    <!-- Delete Button -->
+                                    <form action="{{ route('shop.delete', $shop->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this shop?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach

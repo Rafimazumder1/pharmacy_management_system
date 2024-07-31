@@ -25,7 +25,7 @@
                             <img src="{{ asset('storage/images/shops/' . $shop->image) }}" alt="shop image" height="50">
                         @endif
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text" name="name" id="name" class="form-control" value="{{ $shop->name }}"

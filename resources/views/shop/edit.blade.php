@@ -57,11 +57,6 @@
                             value="{{ $shop->status }}">
                     </div>
 
-                    <div class="form-group">
-                        <label for="upazilla_id">Upazilla ID</label>
-                        <input type="text" name="upazilla_id" id="upazilla_id" class="form-control"
-                            value="{{ $shop->upazilla_id }}">
-                    </div>
 
                     <button type="submit" class="btn btn-primary">Update Shop</button>
                 </form>

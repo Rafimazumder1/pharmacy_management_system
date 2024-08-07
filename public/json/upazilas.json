@@ -1,0 +1,18 @@
+[
+   
+    { "id": 1, "name": "Dhaka", "district_id": 1 },
+    { "id": 2, "name": "Khilkhet", "district_id": 1 },
+    { "id": 3, "name": "Gulshan", "district_id": 1 },
+    
+   
+    { "id": 4, "name": "Bandarban", "district_id": 10 },
+    { "id": 5, "name": "Ruma", "district_id": 10 },
+    
+   
+    { "id": 6, "name": "Khulna", "district_id": 23 },
+    { "id": 7, "name": "Dacope", "district_id": 23 },
+    
+   
+    { "id": 8, "name": "Rajshahi", "district_id": 34 },
+    { "id": 9, "name": "Puthia", "district_id": 34 }
+]

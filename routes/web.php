@@ -147,12 +147,14 @@ Route::group(['middleware' => ['local']], function () {
             Route::get('/shop/edit/{id}', [ShopController::class, 'edit'])->name('shop.edit');
             Route::patch('/shop/update/{id}', [ShopController::class, 'update'])->name('shop.update');
             Route::get('/shop/view/{id}', [ShopController::class, 'view'])->name('shop.view');
-            Route::delete('/shop/{id}', [ShopController::class, 'delete'])->name('shop.delete');
+            Route::delete('/shops/{id}', [ShopController::class, 'delete'])->name('shop.delete');
+
             
 
             // Route for getting districts based on the selected division
             Route::get('/get-districts/{division_id}', [ShopController::class, 'getDistricts'])->name('get-districts');
-            Route::get('/get-districts/{division_id}', [ShopController::class, 'getDistricts'])->name('get-districts');
+            // Route::get('/get-districts/{division_id}', [ShopController::class, 'getDistricts'])->name('get-districts');
+            Route::get('get-thanas/{districtId}', [ShopController::class, 'getThanas'])->name('get-thanas');
 
             // routes for requisitions menu
             Route::resource('requisitions', RequisitionController::class);

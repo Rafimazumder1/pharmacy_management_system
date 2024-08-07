@@ -1,5 +1,10 @@
 
 
+
+
+
+
+
 <?php $__env->startSection('content'); ?>
     <div class="container">
         <div class="row">
@@ -41,25 +46,18 @@
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </div>
-                            
-                        <!-- District -->
+                            <!-- District -->
                             <div class="mb-3">
                                 <label for="district" class="form-label">District</label>
                                 <select class="form-control" id="district" name="district" required>
                                     <option value="">Select District</option>
-                                    <?php $__currentLoopData = $dd; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $div): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($div->id); ?>"><?php echo e($div->name); ?></option>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </div>
-                            <!-- Upazilla -->
+                            <!-- Thana -->
                             <div class="mb-3">
-                                <label for="upazilla" class="form-label">Upazilla</label>
-                                <select class="form-control" id="upazilla" name="upazilla" required>
-                                    <option value="">Select Upazilla</option>
-                                    <?php $__currentLoopData = $upzila; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $upzillas): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($upzillas->id); ?>"><?php echo e($upzillas->name); ?></option>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <label for="Thanas" class="form-label">Thana</label>
+                                <select class="form-control" id="Thanas" name="Thanas" required>
+                                    <option value="">Select Thana</option>
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -70,9 +68,11 @@
                                 <label for="site_logo" class="form-label">Site Logo</label>
                                 <input type="file" class="form-control" id="site_logo" name="site_logo">
                             </div>
-
+                        
                             <button type="submit" class="btn btn-primary">Add Shop</button>
                         </form>
+                        
+                        
                     </div>
                 </div>
             </div>
@@ -128,40 +128,66 @@
     </div>
 <?php $__env->stopSection(); ?>
 
-<?php $__env->startPush('scripts'); ?>
+
     <!-- Include jQuery if not already included -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            $('#division').on('change', function() {
-                var divisionId = $(this).val();
-                console.log('Selected Division ID:', divisionId); // Debug line
-                if (divisionId) {
-                    $.ajax({
-                        url: '<?php echo e(route('get-districts', '')); ?>/' + divisionId,
-                        type: "GET",
-                        dataType: "json",
-                        success: function(data) {
-                            console.log('Received Data:', data); // Debug line
-                            $('#district').empty();
-                            $('#district').append('<option value="">Select District</option>');
-                            $.each(data, function(key, value) {
-                                $('#district').append('<option value="' + value.id +
-                                    '">' + value.name + '</option>');
-                            });
-                        },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                            console.error('AJAX Error:', textStatus); // Debug line
-                        }
-                    });
-                } else {
-                    $('#district').empty();
-                    $('#district').append('<option value="">Select District</option>');
-                }
-            });
+    
+
+<script>
+    $(document).ready(function() {
+        $('#division').on('change', function() {
+            var divisionId = $(this).val();
+            console.log('Selected Division ID:', divisionId); // Debug line
+            if (divisionId) {
+                $.ajax({
+                    url: '<?php echo e(route('get-districts', '')); ?>/' + divisionId,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        console.log('Received Data:', data); // Debug line
+                        $('#district').empty();
+                        $('#district').append('<option value="">Select District</option>');
+                        $.each(data, function(key, value) {
+                            $('#district').append('<option value="' + value.id + '">' + value.name + '</option>');
+                        });
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('AJAX Error:', textStatus); // Debug line
+                    }
+                });
+            } else {
+                $('#district').empty();
+                $('#district').append('<option value="">Select District</option>');
+            }
         });
-    </script>
-<?php $__env->stopPush(); ?>
+
+        $('#district').on('change', function() {
+            var districtId = $(this).val();
+            console.log('Selected District ID:', districtId); // Debug line
+            if (districtId) {
+                $.ajax({
+                    url: '<?php echo e(route('get-thanas', '')); ?>/' + districtId,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        console.log('Received Data:', data); // Debug line
+                        $('#Thanas').empty();
+                        $('#Thanas').append('<option value="">Select Thana</option>');
+                        $.each(data, function(key, value) {
+                            $('#Thanas').append('<option value="' + value.id + '">' + value.name + '</option>');
+                        });
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('AJAX Error:', textStatus); // Debug line
+                    }
+                });
+            } else {
+                $('#Thanas').empty();
+                $('#Thanas').append('<option value="">Select Thana</option>');
+            }
+        });
+    });
+</script>
 
 <?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH E:\xampp\htdocs\PHARMACY\resources\views/shop/shops.blade.php ENDPATH**/ ?>

@@ -47,12 +47,10 @@
                                     </a>
 
                                     <!-- Delete Button -->
-                                    <form action="<?php echo e(route('shop.delete', $shop->id)); ?>" method="POST" style="display:inline;">
+                                    <form action="<?php echo e(route('shop.delete', $shop->id)); ?>" method="POST" onsubmit="return confirm('Are you sure you want to delete this shop?');">
                                         <?php echo csrf_field(); ?>
                                         <?php echo method_field('DELETE'); ?>
-                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this shop?')">
-                                            Delete
-                                        </button>
+                                        <button type="submit" class="btn btn-danger">Delete</button>
                                     </form>
                                 </td>
                             </tr>

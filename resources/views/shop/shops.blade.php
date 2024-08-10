@@ -261,7 +261,10 @@
                                     <th>Site Title</th>
                                     <th>Status</th>
                                     <th>Upazilla ID</th>
+                                    <th>Shop ID</th>
                                     <th>Action</th>
+                                    
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -273,6 +276,8 @@
                                         <td>{{ $shop->site_title }}</td>
                                         <td>{{ $shop->status }}</td>
                                         <td>{{ $shop->upazilla_id }}</td>
+                                        <td>{{ $shop->SHOP_ID }}</td>
+
                                         <td>
                                             <a href="{{ route('shop.edit', $shop->id) }}" class="btn btn-primary"
                                                 style="color:white;">Edit</a>

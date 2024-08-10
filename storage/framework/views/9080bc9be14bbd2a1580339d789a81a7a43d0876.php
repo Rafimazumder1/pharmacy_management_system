@@ -331,10 +331,10 @@
             <?php
                 $data[$i]['y'] = $date;
                 $data[$i]['a'] = \App\Models\Invoice::where('shop_id', $user->shop_id)
-                    ->where('date', $date)
+                    ->where('n_date', $date)
                     ->count();
                 $data[$i]['b'] = \App\Models\Purchase::where('shop_id', $user->shop_id)
-                    ->where('date', $date)
+                    ->where('new_date', $date)
                     ->count();
                 $i++;
             ?>

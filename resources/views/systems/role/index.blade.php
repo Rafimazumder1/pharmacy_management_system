@@ -24,15 +24,15 @@
                 <tbody>
                     @foreach($roles as $role)
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $role->id }}</td>
                         <td>{{ $role->name }}</td>
                         <td>{{ $role->status }}</td>
                         <td>
                             <a class="btn btn-sm btn-info" href="{{ route('role.edit',$role->id ) }}">
-                                <i class="fa fa-edit"></i>
+                                <i class="fa fa-edit"> Edit</i>
                             </a>
                             <a class="btn btn-sm btn-danger" onclick="return confirm('Are you sure to delete')" href="{{ route('role.delete',$role->id ) }}">
-                                <i class="fa fa-trash"></i>
+                                <i class="fa fa-trash">Delete</i>
                             </a>
                         </td>
                     </tr>

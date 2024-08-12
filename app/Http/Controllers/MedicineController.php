@@ -108,7 +108,6 @@ class MedicineController extends Controller
                 Storage::disk('public')->put('images/medicine/' . $imageName, $bannerImage);
                 $customer->image = $imageName;
             }
-            // dd($request);
 
             $customer->shop_id = Auth::user()->shop_id;
             if ($customer->save()) {
@@ -127,7 +126,6 @@ class MedicineController extends Controller
             $type = Type::where('shop_id', Auth::user()->shop_id)->orWhere('global', 1)->get();
             return view('medicine.add', compact('leaf', 'unit', 'category', 'supplier','vendors', 'type'));
         }
-       
     }
 
 

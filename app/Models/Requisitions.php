@@ -13,13 +13,21 @@ class Requisitions extends Model
     protected $primaryKey = 'ID';
     public $incrementing = false;
     protected $fillable = [
+        
+        'SHOP_ID',
         'medicine_id',
         'qty',
+
     ];
     public $timestamps = false;
 
     public function medicine()
     {
         return $this->belongsTo(Medicine::class);
+    }
+
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class);
     }
 }

@@ -150,15 +150,52 @@
     </li>
 
     <!--Requisitions menus -->
-    <li class="nav-item <?php echo e(active_if_match('requisitions')); ?>">
-        <a class="d-flex align-items-center" href="<?php echo e(route('requisitions')); ?>">
+    
+
+    <?php
+    $userRole = Auth::user()->role; // Assuming 'role' is the attribute that stores the user's role
+?>
+
+<?php
+    // Assuming $allowedRoleIds is an array of role IDs that should have access
+    $allowedRoleIds = [1,2]; // Replace these with the actual role IDs for 'Admin' and 'Operator'
+?>
+
+<?php if(in_array(auth()->user()->role_id, $allowedRoleIds)): ?>
+    <li class="nav-item <?php echo e(active_if_match('requisitions/add')); ?> || <?php echo e(active_if_match('requisitions/details')); ?>">
+        <a class="d-flex align-items-center" href="#">
             <i class="fa-solid fa-circle-plus"></i>
             <span class="menu-title text-truncate" data-i18n="Requisitions">
                 <?php echo e(__('Requisitions')); ?>
 
             </span>
         </a>
+        <ul class="menu-content">
+            <li class="<?php echo e(active_if_full_match('requisitions/add')); ?>">
+                <a class="d-flex align-items-center" href="<?php echo e(route('requisitions')); ?>">
+                    <i data-feather="circle"></i>
+                    <span class="menu-item text-truncate" data-i18n="Add Requisition">
+                        <?php echo e(__('Add Requisition')); ?>
+
+                    </span>
+                </a>
+            </li>
+            <li class="<?php echo e(active_if_full_match('requisitions/details')); ?>">
+                <a class="d-flex align-items-center" href="">
+                    <i data-feather="circle"></i>
+                    <span class="menu-item text-truncate" data-i18n="Details Requisition">
+                        <?php echo e(__('Details Requisition')); ?>
+
+                    </span>
+                </a>
+            </li>
+        </ul>
     </li>
+<?php endif; ?>
+
+
+    
+    
 
     <?php
         use Illuminate\Support\Facades\Schema;

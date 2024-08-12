@@ -61,6 +61,7 @@ class RoleController extends Controller {
                 ];
                 Permission::create($permission);
                 Toastr::success('Successfully Created!', '', [ 'toast-top-right']);
+                
                 return redirect()->route('role.index');
             }
         } else {
@@ -210,16 +211,44 @@ class RoleController extends Controller {
      * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function delete($id) {
-        $role = Role::findOrFail($id);
-        $oldpermissions = Permission::where('role_id',$role->id)->first();
-        $oldpermissions->delete();
+    // public function delete($id) {
+    //     $role = Role::findOrFail($id);
+    //     $oldpermissions = Permission::where('role_id',$role->id)->first();
+    //     $oldpermissions->delete();
         
-        if ( $role->delete() ) {
-                Toastr::error('Deleted Successfully!', '', [ 'toast-top-right']);
-                return redirect()->route('role.index');
-        } else {
-            return response()->json( ['error' => 'Delete Unsuccessfully!'], 200 );
-        }
+    //     if ( $role->delete() ) {
+    //             Toastr::error('Deleted Successfully!', '', [ 'toast-top-right']);
+    //             return redirect()->route('role.index');
+    //     } else {
+    //         return response()->json( ['error' => 'Delete Unsuccessfully!'], 200 );
+    //     }
+    // }
+    public function delete($id)
+{
+    // Find the role by ID or fail
+    $role = Role::findOrFail($id);
+
+    // Retrieve the associated permissions
+    $oldPermissions = Permission::where('role_id', $role->id)->first();
+
+    // Check if permissions exist before attempting to delete
+    if ($oldPermissions) {
+        $oldPermissions->delete();
     }
+
+    // Attempt to delete the role
+    try {
+        if ($role->delete()) {
+            Toastr::error('Deleted Successfully!', '', ['toast-top-right']);
+            return redirect()->route('role.index');
+        } else {
+            return response()->json(['error' => 'Deletion Unsuccessful!'], 200);
+        }
+    } catch (\Exception $e) {
+        // Log the exception and return an error response
+        \Log::error('Error deleting role: ' . $e->getMessage());
+        return response()->json(['error' => 'An unexpected error occurred. Please try again later.'], 500);
+    }
+}
+
 }

@@ -159,10 +159,13 @@ Route::group(['middleware' => ['local']], function () {
             // routes for requisitions menu
             Route::resource('requisitions', RequisitionController::class);
             Route::get('/requisitions', [RequisitionController::class, 'index'])->name('requisitions');
+            // Route::get('/detailreq', [RequisitionController::class, 'detail'])->name('req');
             Route::post('/requisitions/store', [RequisitionController::class, 'store'])->name('requisitions.store');
             Route::get('/requisitions/edit/{id}', [RequisitionController::class, 'edit'])->name('requisitions.edit');
             Route::patch('/requisitions/update/{id}', [RequisitionController::class, 'update'])->name('requisitions.update');
             Route::delete('/requisitions/delete/{id}', [RequisitionController::class, 'destroy'])->name('requisitions.destroy');
+
+            Route::get('/requisitions/save/{id}', [RequisitionController::class, 'save'])->name('requisitions.save');
 
             //Report Routes
             Route::prefix('report')->name('report.')->group(function () {

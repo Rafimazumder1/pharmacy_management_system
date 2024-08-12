@@ -143,14 +143,56 @@
     </li>
 
     <!--Requisitions menus -->
-    <li class="nav-item {{ active_if_match('requisitions') }}">
+    {{-- <li class="nav-item {{ active_if_match('requisitions') }}">
         <a class="d-flex align-items-center" href="{{ route('requisitions') }}">
             <i class="fa-solid fa-circle-plus"></i>
             <span class="menu-title text-truncate" data-i18n="Requisitions">
                 {{ __('Requisitions') }}
             </span>
         </a>
+    </li> --}}
+
+    @php
+    $userRole = Auth::user()->role; // Assuming 'role' is the attribute that stores the user's role
+@endphp
+
+@php
+    // Assuming $allowedRoleIds is an array of role IDs that should have access
+    $allowedRoleIds = [1,2]; // Replace these with the actual role IDs for 'Admin' and 'Operator'
+@endphp
+
+@if(in_array(auth()->user()->role_id, $allowedRoleIds))
+    <li class="nav-item {{ active_if_match('requisitions/add') }} || {{ active_if_match('requisitions/details') }}">
+        <a class="d-flex align-items-center" href="#">
+            <i class="fa-solid fa-circle-plus"></i>
+            <span class="menu-title text-truncate" data-i18n="Requisitions">
+                {{ __('Requisitions') }}
+            </span>
+        </a>
+        <ul class="menu-content">
+            <li class="{{ active_if_full_match('requisitions/add') }}">
+                <a class="d-flex align-items-center" href="{{ route('requisitions') }}">
+                    <i data-feather="circle"></i>
+                    <span class="menu-item text-truncate" data-i18n="Add Requisition">
+                        {{ __('Add Requisition') }}
+                    </span>
+                </a>
+            </li>
+            <li class="{{ active_if_full_match('requisitions/details') }}">
+                <a class="d-flex align-items-center" href="">
+                    <i data-feather="circle"></i>
+                    <span class="menu-item text-truncate" data-i18n="Details Requisition">
+                        {{ __('Details Requisition') }}
+                    </span>
+                </a>
+            </li>
+        </ul>
     </li>
+@endif
+
+
+    
+    
 
     @php
         use Illuminate\Support\Facades\Schema;

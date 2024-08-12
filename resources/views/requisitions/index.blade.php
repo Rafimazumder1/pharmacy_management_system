@@ -44,6 +44,15 @@
                                 </select>
                             </div>
 
+                            {{-- <div class="form-group">
+                                <label for="shop_id">Shop</label>
+                                <select name="SHOP_ID" id="SHOP_ID" class="form-control">
+                                    @foreach ($shops as $shop)
+                                        <option value="{{ $shop->id }}">{{ $shop->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div> --}}
+
                             <!-- Input field for the requisition quantity -->
                             <div class="mb-3">
                                 <label for="qty" class="form-label">Quantity</label>
@@ -81,6 +90,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Medicine</th>
+                                    <th>Shop ID</th>
                                     <th>Quantity</th>
                                     <th>Action</th>
                                 </tr>
@@ -90,6 +100,8 @@
                                     <tr>
                                         <td>{{ $requisition->id }}</td>
                                         <td>{{ $requisition->medicine ? $requisition->medicine->name : 'N/A' }}</td>
+                                        <td>{{ $requisition->shop ? $requisition->shop->id : 'N/A' }}</td>
+
                                         <td>{{ $requisition->qty }}</td>
                                         <td>
                                             <a href="{{ route('requisitions.edit', $requisition->id) }}"

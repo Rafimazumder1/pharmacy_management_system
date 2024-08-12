@@ -65,6 +65,7 @@ class Admin extends Authenticatable
             'manufacturers_list' => 0,
             'vendor_add' => 0,
             'vendor_list' => 0,
+            'Shop Operator' => 0,
             'medicine_add' => 0,
             'medicine_list' => 0,
             'categories' => 0,

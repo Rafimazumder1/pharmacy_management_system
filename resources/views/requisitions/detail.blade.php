@@ -1,67 +1,81 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <div class="card">
-                    <div class="card-header">
-                        Add Requisition
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                Requisitions List
+            </div>
+            <div class="card-body">
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
                     </div>
-                    <div class="card-body">
-                        @if (session('success'))
-                            <div class="alert alert-success">
-                                {{ session('success') }}
-                            </div>
-                        @endif
+                @endif
 
-                        @if (session('error'))
-                            <div class="alert alert-danger">
-                                {{ session('error') }}
-                            </div>
-                        @endif
-
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-
-                        <form action="{{ route('requisitions.store') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <!-- Add select input field for medicine -->
-                            <div class="mb-3">
-                                <label for="medicine" class="form-label">Medicine</label>
-                                <select class="form-control" id="medicine" name="medicine_id" required>
-                                    <option value="">Select Medicine</option>
-                                    @foreach ($medicines as $medicine)
-                                        <option value="{{ $medicine->id }}">{{ $medicine->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            {{-- <div class="form-group">
-                                <label for="shop_id">Shop</label>
-                                <select name="SHOP_ID" id="SHOP_ID" class="form-control">
-                                    @foreach ($shops as $shop)
-                                        <option value="{{ $shop->id }}">{{ $shop->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div> --}}
-
-                            <!-- Input field for the requisition quantity -->
-                            <div class="mb-3">
-                                <label for="qty" class="form-label">Quantity</label>
-                                <input type="number" class="form-control" id="qty" name="qty" required>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary">Add Requisition</button>
-                        </form>
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
                     </div>
-                </div>
+                @endif
+
+
+                <table id="requisitionsTable" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Requisition ID</th>
+                            <th>Medicine</th>
+                            <th>Quantity</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (session()->get('temporary_requisitions', []) as $requisition)
+                            @if (isset($requisition['medicines']))
+                                @foreach ($requisition['medicines'] as $index => $medicine)
+                                    <tr>
+                                        <!-- Display the req_id only for the first medicine in the group -->
+                                        @if ($index == 0)
+                                            <td rowspan="{{ count($requisition['medicines']) }}">
+                                                {{ $requisition['req_id'] }}</td>
+                                        @endif
+                                        <td>{{ $medicines->find($medicine['medicine_id'])->name ?? 'N/A' }}</td>
+                                        <td>{{ $medicine['qty'] }}</td>
+                                        <!-- Action buttons only for the first medicine row -->
+                                        @if ($index == 0)
+                                            <td rowspan="{{ count($requisition['medicines']) }}">
+                                                <!-- Edit Button -->
+                                                <a href="{{ route('requisitions.edit', ['req_id' => $requisition['req_id']]) }}"
+                                                    class="btn btn-primary">Edit</a>
+
+                                                <!-- Delete Button -->
+                                                <form
+                                                    action="{{ route('requisitions.destroy', ['req_id' => $requisition['req_id']]) }}"method="POST" style="display:inline-block;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger"
+                                                        onclick="return confirm('Are you sure?')">Delete</button>
+                                                </form>
+                                            </td>
+                                        @endif
+                                    </tr>
+                                @endforeach
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
+
+
+                <!-- Form to finalize requisitions -->
+                <form action="{{ route('requisitions.finalize') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-success">Finalize Requisitions</button>
+                </form>
             </div>
         </div>
+    </div>
+</div>
+</div>
+@endsection

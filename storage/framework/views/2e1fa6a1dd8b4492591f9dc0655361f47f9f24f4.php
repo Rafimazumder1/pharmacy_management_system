@@ -158,7 +158,7 @@
 
 <?php
     // Assuming $allowedRoleIds is an array of role IDs that should have access
-    $allowedRoleIds = [1,2]; // Replace these with the actual role IDs for 'Admin' and 'Operator'
+    $allowedRoleIds = [1,19]; // Replace these with the actual role IDs for 'Admin' and 'Operator'
 ?>
 
 <?php if(in_array(auth()->user()->role_id, $allowedRoleIds)): ?>
@@ -171,17 +171,18 @@
             </span>
         </a>
         <ul class="menu-content">
-            <li class="<?php echo e(active_if_full_match('requisitions/add')); ?>">
-                <a class="d-flex align-items-center" href="<?php echo e(route('requisitions')); ?>">
+            <li class="<?php echo e(active_if_full_match('requisitions')); ?>">
+                <a class="d-flex align-items-center" href="<?php echo e(route('requisitions.reset')); ?>">
                     <i data-feather="circle"></i>
                     <span class="menu-item text-truncate" data-i18n="Add Requisition">
                         <?php echo e(__('Add Requisition')); ?>
 
                     </span>
                 </a>
-            </li>
+            </li> 
+                     
             <li class="<?php echo e(active_if_full_match('requisitions/details')); ?>">
-                <a class="d-flex align-items-center" href="">
+                <a class="d-flex align-items-center"  href="<?php echo e(route('detailreq')); ?>">
                     <i data-feather="circle"></i>
                     <span class="menu-item text-truncate" data-i18n="Details Requisition">
                         <?php echo e(__('Details Requisition')); ?>

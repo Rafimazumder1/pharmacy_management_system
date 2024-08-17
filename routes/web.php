@@ -112,7 +112,7 @@ Route::group(['middleware' => ['local']], function () {
         Route::group(['middleware' => ['EXPIRE']], function () {
             Route::any('/updateprice/{id}', 'MedicineController@update_price')->name('update.price');
             //            Route::get('/stockout', 'MedicineController@stockout')->name('stockout');
-//            Route::get('/expired', 'MedicineController@expired')->name('expired');
+            //            Route::get('/expired', 'MedicineController@expired')->name('expired');
             Route::get('/expired/delete/{id}', 'MedicineController@expired_delete')->name('expired.delete');
             Route::get('/in_stock', 'MedicineController@instock')->name('instock');
             Route::get('/emergency-stock', 'MedicineController@emergencyStock')->name('emergency_stock');
@@ -137,7 +137,7 @@ Route::group(['middleware' => ['local']], function () {
             Route::post('/customer/send-email/process', 'CustomerController@sendEmailProcess')->name('customer.send_email.process');
 
             // route for adding, showing list and editing shops
-          
+
 
             // Routes for shop management
             Route::get('/shops', [ShopController::class, 'shops'])->name('shops');
@@ -149,7 +149,7 @@ Route::group(['middleware' => ['local']], function () {
             Route::get('/shop/view/{id}', [ShopController::class, 'view'])->name('shop.view');
             Route::delete('/shops/{id}', [ShopController::class, 'delete'])->name('shop.delete');
 
-            
+
 
             // Route for getting districts based on the selected division
             Route::get('/get-districts/{division_id}', [ShopController::class, 'getDistricts'])->name('get-districts');
@@ -157,15 +157,31 @@ Route::group(['middleware' => ['local']], function () {
             Route::get('get-thanas/{districtId}', [ShopController::class, 'getThanas'])->name('get-thanas');
 
             // routes for requisitions menu
-            Route::resource('requisitions', RequisitionController::class);
-            Route::get('/requisitions', [RequisitionController::class, 'index'])->name('requisitions');
-            // Route::get('/detailreq', [RequisitionController::class, 'detail'])->name('req');
-            Route::post('/requisitions/store', [RequisitionController::class, 'store'])->name('requisitions.store');
-            Route::get('/requisitions/edit/{id}', [RequisitionController::class, 'edit'])->name('requisitions.edit');
-            Route::patch('/requisitions/update/{id}', [RequisitionController::class, 'update'])->name('requisitions.update');
-            Route::delete('/requisitions/delete/{id}', [RequisitionController::class, 'destroy'])->name('requisitions.destroy');
+            // Route::resource('requisitions', RequisitionController::class);
+            // Route::get('/requisitions', [RequisitionController::class, 'index'])->name('requisitions');
+            // // Route::get('/detailreq', [RequisitionController::class, 'detail'])->name('req');
+            // Route::post('/requisitions/store', [RequisitionController::class, 'store'])->name('requisitions.store');
+            // Route::get('/requisitions/edit/{id}', [RequisitionController::class, 'edit'])->name('requisitions.edit');
+            // Route::patch('/requisitions/update/{id}', [RequisitionController::class, 'update'])->name('requisitions.update');
+            // Route::delete('/requisitions/delete/{id}', [RequisitionController::class, 'destroy'])->name('requisitions.destroy');
 
-            Route::get('/requisitions/save/{id}', [RequisitionController::class, 'save'])->name('requisitions.save');
+            // Route::get('/requisitions/save/{id}', [RequisitionController::class, 'save'])->name('requisitions.save');
+
+
+
+            Route::get('/requisitions', [RequisitionController::class, 'index'])->name('requisitions');
+            Route::get('/detailreq', [RequisitionController::class, 'detail'])->name('detailreq');
+            Route::post('/requisitions/store', [RequisitionController::class, 'store'])->name('requisitions.store');
+            Route::get('/requisitions/edit/{req_id}', [RequisitionController::class, 'edit'])->name('requisitions.edit');
+            Route::patch('/requisitions/update/{id}', [RequisitionController::class, 'update'])->name('requisitions.update');
+            Route::delete('/requisitions/delete/{req_id}', [RequisitionController::class, 'destroy'])->name('requisitions.destroy');
+            Route::post('/requisitions/finalize', [RequisitionController::class, 'finalize'])->name('requisitions.finalize');
+            // Route::get('/requisitions/edit/{req_id}', [RequisitionController::class, 'edit'])->name('requisitions.edit');
+            Route::post('/requisitions/update', [RequisitionController::class, 'update'])->name('requisitions.update');
+            Route::get('/requisitions/reset', [RequisitionController::class, 'resetRequisitions'])->name('requisitions.reset');
+
+
+
 
             //Report Routes
             Route::prefix('report')->name('report.')->group(function () {
@@ -396,7 +412,6 @@ Route::get('/db-test', function () {
         $output .= '</tbody></table>';
 
         return $output;
-
     } catch (\Exception $e) {
         return 'Database connection failed: ' . $e->getMessage();
     }

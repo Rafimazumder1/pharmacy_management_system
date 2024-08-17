@@ -158,7 +158,7 @@
 
 @php
     // Assuming $allowedRoleIds is an array of role IDs that should have access
-    $allowedRoleIds = [1,2]; // Replace these with the actual role IDs for 'Admin' and 'Operator'
+    $allowedRoleIds = [1,19]; // Replace these with the actual role IDs for 'Admin' and 'Operator'
 @endphp
 
 @if(in_array(auth()->user()->role_id, $allowedRoleIds))
@@ -170,16 +170,17 @@
             </span>
         </a>
         <ul class="menu-content">
-            <li class="{{ active_if_full_match('requisitions/add') }}">
-                <a class="d-flex align-items-center" href="{{ route('requisitions') }}">
+            <li class="{{ active_if_full_match('requisitions') }}">
+                <a class="d-flex align-items-center" href="{{ route('requisitions.reset') }}">
                     <i data-feather="circle"></i>
                     <span class="menu-item text-truncate" data-i18n="Add Requisition">
                         {{ __('Add Requisition') }}
                     </span>
                 </a>
-            </li>
+            </li> 
+                     
             <li class="{{ active_if_full_match('requisitions/details') }}">
-                <a class="d-flex align-items-center" href="">
+                <a class="d-flex align-items-center"  href="{{ route('detailreq') }}">
                     <i data-feather="circle"></i>
                     <span class="menu-item text-truncate" data-i18n="Details Requisition">
                         {{ __('Details Requisition') }}

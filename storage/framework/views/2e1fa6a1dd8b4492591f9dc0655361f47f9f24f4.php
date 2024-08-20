@@ -152,6 +152,7 @@
     <!--Requisitions menus -->
     
 
+   
     <?php
     $userRole = Auth::user()->role; // Assuming 'role' is the attribute that stores the user's role
 ?>
@@ -182,7 +183,7 @@
             </li> 
                      
             <li class="<?php echo e(active_if_full_match('requisitions/details')); ?>">
-                <a class="d-flex align-items-center"  href="<?php echo e(route('detailreq')); ?>">
+                <a class="d-flex align-items-center"  href="<?php echo e(route('requisitions.byShop')); ?>">
                     <i data-feather="circle"></i>
                     <span class="menu-item text-truncate" data-i18n="Details Requisition">
                         <?php echo e(__('Details Requisition')); ?>
@@ -190,6 +191,7 @@
                     </span>
                 </a>
             </li>
+            
         </ul>
     </li>
 <?php endif; ?>

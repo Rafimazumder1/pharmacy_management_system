@@ -1,81 +1,54 @@
 @extends('layouts.app')
 
 @section('content')
+    <div class="container">
+        <h1>Requisitions</h1>
 
-<div class="row mt-4">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                Requisitions List
+        <!-- Filter Form for Shop and APPR_1 -->
+        <form method="GET" action="{{ route('requisitions.byShop') }}" class="form-inline mb-4">
+            <div class="form-group mr-3">
+                <label for="shop_id" class="mr-2">Select Shop:</label>
+                <select name="shop_id" id="shop_id" class="form-control" onchange="this.form.submit()">
+                    @foreach($shops as $shop)
+                        <option value="{{ $shop->id }}" {{ $shopId == $shop->id ? 'selected' : '' }}>
+                            {{ $shop->id }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
-            <div class="card-body">
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
 
-                @if (session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
-                @endif
+            <div class="form-group">
+                <label for="appr" class="mr-2">Filter by Approval Status (APPR_1):</label>
+                <select name="appr" id="appr" class="form-control" onchange="this.form.submit()">
+                    <option value="N" {{ $approvalStatus == 'N' ? 'selected' : '' }}>Not Approved (N)</option>
+                    <option value="Y" {{ $approvalStatus == 'Y' ? 'selected' : '' }}>Approved (Y)</option>
+                </select>
+            </div>
+        </form>
 
-
-                <table id="requisitionsTable" class="table table-striped table-bordered">
-                    <thead>
+        @if($requisitions->isEmpty())
+            <p>No requisitions found for the selected shop with APPR_1 = '{{ $approvalStatus }}'.</p>
+        @else
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Requisition ID</th>
+                        {{-- <th>Approval Status (APPR_1)</th> --}}
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($requisitions as $requisition)
                         <tr>
-                            <th>Requisition ID</th>
-                            <th>Medicine</th>
-                            <th>Quantity</th>
-                            <th>Action</th>
+                            <td>{{ $requisition->id }}</td>
+                            {{-- <td>{{ $requisition->appr_1 }}</td> --}}
+                            <td>
+                                <a href="{{ route('requisitions.details', ['id' => $requisition->id]) }}" class="btn btn-primary">Details</a>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (session()->get('temporary_requisitions', []) as $requisition)
-                            @if (isset($requisition['medicines']))
-                                @foreach ($requisition['medicines'] as $index => $medicine)
-                                    <tr>
-                                        <!-- Display the req_id only for the first medicine in the group -->
-                                        @if ($index == 0)
-                                            <td rowspan="{{ count($requisition['medicines']) }}">
-                                                {{ $requisition['req_id'] }}</td>
-                                        @endif
-                                        <td>{{ $medicines->find($medicine['medicine_id'])->name ?? 'N/A' }}</td>
-                                        <td>{{ $medicine['qty'] }}</td>
-                                        <!-- Action buttons only for the first medicine row -->
-                                        @if ($index == 0)
-                                            <td rowspan="{{ count($requisition['medicines']) }}">
-                                                <!-- Edit Button -->
-                                                <a href="{{ route('requisitions.edit', ['req_id' => $requisition['req_id']]) }}"
-                                                    class="btn btn-primary">Edit</a>
-
-                                                <!-- Delete Button -->
-                                                <form
-                                                    action="{{ route('requisitions.destroy', ['req_id' => $requisition['req_id']]) }}"method="POST" style="display:inline-block;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger"
-                                                        onclick="return confirm('Are you sure?')">Delete</button>
-                                                </form>
-                                            </td>
-                                        @endif
-                                    </tr>
-                                @endforeach
-                            @endif
-                        @endforeach
-                    </tbody>
-                </table>
-
-
-                <!-- Form to finalize requisitions -->
-                <form action="{{ route('requisitions.finalize') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-success">Finalize Requisitions</button>
-                </form>
-            </div>
-        </div>
+                    @endforeach
+                </tbody>
+            </table>
+        @endif
     </div>
-</div>
-</div>
 @endsection

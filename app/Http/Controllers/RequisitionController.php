@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Exception;
 class RequisitionController extends Controller
 
     {
@@ -131,25 +133,51 @@ class RequisitionController extends Controller
         }
     
 
-        public function finalize()
-        {
-            $requisitions = session()->get('temporary_requisitions', []);
-    
-            if (empty($requisitions)) {
-                return redirect()->route('requisitions')->with('error', 'No requisitions to finalize.');
-            }
-    
-            // Process the requisitions (e.g., save them to the database)
-            foreach ($requisitions as $requisition) {
-                // Your logic to save the requisition to the database
-            }
-    
-            // Clear the temporary requisitions from session
-            session()->forget('temporary_requisitions');
-            session()->forget('req_id'); // Clear req_id as well
-    
-            return redirect()->route('requisitions')->with('success', 'Requisitions finalized successfully!');
+        public function save(Request $request)
+    {
+        // Retrieve temporary requisitions from session
+        $temporaryRequisitions = session()->get('temporary_requisitions', []);
+        
+        if (empty($temporaryRequisitions)) {
+            return redirect()->back()->with('error', 'No requisitions to save.');
         }
+
+        // Retrieve shop ID from the authenticated user or other source
+        $shopId = Auth::user()->shop_id; // Adjust based on your user model
+
+        // Example of inserting requisitions into database
+        foreach ($temporaryRequisitions as $requisition) {
+            // Insert requisition details into the database
+            $reqId = $requisition['req_id']; // Use a unique identifier for requisition
+
+            // Insert requisition header
+            DB::table('REQ')->insert([
+                'ID' => $reqId,
+                'SHOP_ID' => $shopId,
+                'USER_ID'=>Auth::user()->id,
+                'CREATED_AT' => now(),
+                'CREATED_BY' => Auth::user()->id, // Adjust if needed
+            ]);
+
+            // Insert medicines into requisition details table
+            foreach ($requisition['medicines'] as $medicine) {
+                DB::table('REQ_DET')->insert([
+                    'REQ_ID' => $reqId,
+                    'SHOP_ID' => $shopId,
+                    'MEDICINE_ID' => $medicine['medicine_id'],
+                    'USER_ID'=>Auth::user()->id,
+                    'QTY' => $medicine['qty'],
+                    'CREATED_AT' => now(),
+                    'CREATED_BY' => Auth::user()->id, // Adjust if needed
+                ]);
+            }
+        }
+
+        // Clear temporary requisitions from session
+        session()->forget('temporary_requisitions');
+
+        return redirect()->route('requisitions')->with('success', 'Requisitions saved successfully.');
+    }
     
 
         public function destroy($req_id)
@@ -200,6 +228,110 @@ class RequisitionController extends Controller
     return view('requisitions.olo');
 
 }
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+public function showRequisitionsByShop(Request $request)
+{
+    // Fetch all shops that the user has access to (customize this based on your application's logic)
+    $shops = DB::table('SHOPS')->get();
+
+    // Retrieve the shop ID from the request or default to the first shop in the list
+    $shopId = $request->input('shop_id', $shops->first()->id);
+
+    // Fetch the APPR_1 filter from the request (default to 'N' if not provided)
+    $approvalStatus = $request->input('appr', 'N');
+
+    // Query to fetch requisitions where SHOP_ID matches and APPR_1 matches the provided status
+    $requisitions = DB::table('REQ')
+        ->select('ID', 'APPR_1')
+        ->where('SHOP_ID', $shopId)
+        ->where('APPR_1', $approvalStatus)
+        ->get();
+
+    // Pass the shops, requisitions, selected shop ID, and approval status to the view
+    return view('requisitions.detail', compact('shops', 'requisitions', 'shopId', 'approvalStatus'));
+}
+
+
+// public function showDetails($id)
+// {
+//     // Fetch requisition details by REQ_ID from REQ_DET table
+//     $requisitionDetails = DB::table('REQ_DET')
+//         ->where('REQ_ID', $id)
+//         ->get();
+
+//     // Fetch the requisition itself for any additional information if needed
+//     $requisition = DB::table('REQ')->find($id);
+
+//     // Fetch all medicines using Eloquent model if you have one
+//     $medicines = Medicine::all();
+
+//     // Pass the requisition details, requisition, and medicines to the view
+//     return view('requisitions.details', compact('requisitionDetails', 'requisition', 'medicines'));
+// }
+
+
+// public function updateDetails(Request $request, $id)
+// {
+//     // Update the REQ_DEL table with the edited details
+//     foreach ($request->input('details') as $detail) {
+//         DB::table('REQ_DET')
+//             ->where('REQ_ID', $id)
+//             ->where('MEDICINE_ID', $detail['medicine_id'])
+//             ->update([
+//                 'QTY' => $detail['qty'],
+//                 // add other fields to update if necessary
+//             ]);
+//     }
+
+//     return redirect()->route('requisitions.details', $id)->with('success', 'Details updated successfully.');
+// }
+
+public function showDetails($id)
+{
+    // Fetch requisition details by REQ_ID from REQ_DET table
+    $requisitionDetails = DB::table('REQ_DET')
+        ->where('REQ_ID', $id)
+        ->get();
+
+    // Fetch the requisition itself for any additional information if needed
+    $requisition = DB::table('REQ')->find($id);
+
+    // Fetch all medicines using Eloquent model if you have one
+    $medicines = Medicine::all()->keyBy('id');
+
+    // Pass the requisition details, requisition, and medicines to the view
+    return view('requisitions.details', compact('requisitionDetails', 'requisition', 'medicines'));
+}
+
+
+
+
+public function updateDetails(Request $request, $id)
+{
+    try {
+        foreach ($request->input('details') as $medicineId => $detail) {
+            DB::table('REQ_DET')
+                ->where('REQ_ID', $id)
+                ->where('MEDICINE_ID', $medicineId)
+                ->update([
+                    'MEDICINE_ID' => $detail['medicine_id'],
+                    'QTY' => $detail['qty'],
+                ]);
+        }
+
+        return redirect()->route('requisitions.details', $id)->with('success', 'Details updated successfully.');
+    } catch (Exception $e) {
+        return redirect()->route('requisitions.details', $id)->with('error', 'Failed to update details: ' . $e->getMessage());
+    }
+}
+
+
+
 
 
 

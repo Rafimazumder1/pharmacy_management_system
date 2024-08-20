@@ -139,7 +139,7 @@
                             {{-- <th>Requisition ID</th> --}}
                             <th>Medicine</th>
                             <th>Quantity</th>
-                            <th>Action</th>
+                            {{-- <th>Action</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -152,7 +152,7 @@
                                         <!-- Display quantity -->
                                         <td>{{ $medicine['qty'] }}</td>
                                         <!-- Action buttons -->
-                                        <td>
+                                        {{-- <td>
                                             <!-- Edit Button -->
                                             <a href="{{ route('requisitions.edit', ['req_id' => $requisition['req_id']]) }}"
                                                 class="btn btn-primary">Edit</a>
@@ -166,7 +166,7 @@
                                                 <button type="submit" class="btn btn-danger"
                                                     onclick="return confirm('Are you sure?')">Delete</button>
                                             </form>
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                 @endforeach
                             @endif
@@ -175,9 +175,9 @@
                 </table>
 
                 <!-- Form to finalize requisitions -->
-                <form action="{{ route('requisitions.finalize') }}" method="POST" class="mt-3">
+                <form action="{{ route('requisitions.save') }}" method="POST" class="mt-3">
                     @csrf
-                    <button type="submit" class="btn btn-success">Finalize Requisitions</button>
+                    <button type="submit" class="btn btn-success">Save</button>
                 </form>
             </div>
         </div>

@@ -183,6 +183,16 @@ Route::group(['middleware' => ['local']], function () {
 
 
 
+            Route::get('/requisitions/shop', [RequisitionController::class, 'showRequisitionsByShop'])->name('requisitions.byShop');
+            Route::get('/requisitions/{id}', [RequisitionController::class, 'showDetails'])->name('requisitions.details');
+            Route::post('/requisitions/{id}', [RequisitionController::class, 'updateDetails'])->name('requisitions.updateDetails');
+            
+
+
+
+
+
+
             //Report Routes
             Route::prefix('report')->name('report.')->group(function () {
                 Route::get('customer/due', 'ReportController@customerDue')->name('customer_due');

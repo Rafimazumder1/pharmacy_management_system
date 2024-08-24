@@ -171,21 +171,35 @@ Route::group(['middleware' => ['local']], function () {
 
             Route::get('/requisitions', [RequisitionController::class, 'index'])->name('requisitions');
             Route::get('/detailreq', [RequisitionController::class, 'detail'])->name('detailreq');
-            Route::post('/requisitions/store', [RequisitionController::class, 'store'])->name('requisitions.store');
-            Route::get('/requisitions/edit/{req_id}', [RequisitionController::class, 'edit'])->name('requisitions.edit');
-            Route::patch('/requisitions/update/{id}', [RequisitionController::class, 'update'])->name('requisitions.update');
-            Route::delete('/requisitions/delete/{req_id}', [RequisitionController::class, 'destroy'])->name('requisitions.destroy');
-            Route::post('/requisitions/finalize', [RequisitionController::class, 'finalize'])->name('requisitions.finalize');
-            // Route::get('/requisitions/edit/{req_id}', [RequisitionController::class, 'edit'])->name('requisitions.edit');
-            Route::post('/requisitions/update', [RequisitionController::class, 'update'])->name('requisitions.update');
-            Route::get('/requisitions/reset', [RequisitionController::class, 'resetRequisitions'])->name('requisitions.reset');
+Route::post('/requisitions/store', [RequisitionController::class, 'store'])->name('requisitions.store');
+Route::get('/requisitions/edit/{req_id}', [RequisitionController::class, 'edit'])->name('requisitions.edit');
+Route::patch('/requisitions/update/{id}', [RequisitionController::class, 'update'])->name('requisitions.update');
+Route::delete('/requisitions/delete/{req_id}', [RequisitionController::class, 'destroy'])->name('requisitions.destroy');
+Route::post('/requisitions/save', [RequisitionController::class, 'save'])->name('requisitions.save');
+// Route::get('/requisitions/edit/{req_id}', [RequisitionController::class, 'edit'])->name('requisitions.edit');
+Route::post('/requisitions/update', [RequisitionController::class, 'update'])->name('requisitions.update');
+Route::get('/requisitions/reset', [RequisitionController::class, 'resetRequisitions'])->name('requisitions.reset');
 
 
 
+Route::get('/olo', [RequisitionController::class, 'olo'])->name('olo');
 
-            Route::get('/requisitions/shop', [RequisitionController::class, 'showRequisitionsByShop'])->name('requisitions.byShop');
-            Route::get('/requisitions/{id}', [RequisitionController::class, 'showDetails'])->name('requisitions.details');
-            Route::post('/requisitions/{id}', [RequisitionController::class, 'updateDetails'])->name('requisitions.updateDetails');
+
+// routes/web.php
+
+Route::get('/requisitions/shop', [RequisitionController::class, 'showRequisitionsByShop'])->name('requisitions.byShop');
+Route::get('/requisitions/{id}', [RequisitionController::class, 'showDetails'])->name('requisitions.details');
+Route::post('/requisitions/{id}', [RequisitionController::class, 'updateDetails'])->name('requisitions.updateDetails');
+
+//Approval routes/
+
+
+
+Route::get('/req/approv', [RequisitionController::class, 'showApprovalRequisitions'])->name('requisitions.approval');
+Route::post('/requisitions/approval/update', [RequisitionController::class, 'updateApprovalStatus'])->name('requisitions.updateApproval');
+// Route::get('/req/approval', function() {
+//     return 'Route is working';
+// });
             
 
 

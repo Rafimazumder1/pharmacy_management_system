@@ -152,7 +152,6 @@
         </a>
     </li> --}}
 
-   
     @php
     $userRole = Auth::user()->role; // Assuming 'role' is the attribute that stores the user's role
 @endphp
@@ -188,14 +187,15 @@
                     </span>
                 </a>
             </li>
-            {{-- <li class="{{ active_if_full_match('requisitions/Approve') }}">
-                <a class="d-flex align-items-center"  href="{{ route('requisitions.details', ['id' => $requisition->id]) }}">
+            
+            <li class="{{ active_if_full_match('requisitions/approval') }}">
+                <a class="d-flex align-items-center" href="{{ route('requisitions.approval') }}">
                     <i data-feather="circle"></i>
-                    <span class="menu-item text-truncate" data-i18n="Details Requisition">
+                    <span class="menu-item text-truncate" data-i18n="Approval Requisition">
                         {{ __('Approval Requisition') }}
                     </span>
                 </a>
-            </li> --}}
+            </li>
         </ul>
     </li>
 @endif

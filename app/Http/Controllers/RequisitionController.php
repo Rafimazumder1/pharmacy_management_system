@@ -234,27 +234,44 @@ class RequisitionController extends Controller
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+// public function showRequisitionsByShop(Request $request)
+// {
+//     // Fetch all shops that the user has access to (customize this based on your application's logic)
+//     $shops = DB::table('SHOPS')->get();
+
+//     // Retrieve the shop ID from the request or default to the first shop in the list
+//     $shopId = $request->input('shop_id', $shops->first()->id);
+
+//     // Fetch the APPR_1 filter from the request (default to 'N' if not provided)
+//     $approvalStatus = $request->input('appr', 'N');
+
+//     // Query to fetch requisitions where SHOP_ID matches and APPR_1 matches the provided status
+//     $requisitions = DB::table('REQ')
+//         ->select('ID', 'APPR_1')
+//         ->where('SHOP_ID', $shopId)
+//         ->where('APPR_1', $approvalStatus)
+//         ->get();
+
+//     // Pass the shops, requisitions, selected shop ID, and approval status to the view
+//     return view('requisitions.detail', compact('shops', 'requisitions', 'shopId', 'approvalStatus'));
+// }
+
 public function showRequisitionsByShop(Request $request)
 {
-    // Fetch all shops that the user has access to (customize this based on your application's logic)
-    $shops = DB::table('SHOPS')->get();
+    // Get the shop_id associated with the logged-in user
+    $shopId = auth()->user()->shop_id;
 
-    // Retrieve the shop ID from the request or default to the first shop in the list
-    $shopId = $request->input('shop_id', $shops->first()->id);
-
-    // Fetch the APPR_1 filter from the request (default to 'N' if not provided)
-    $approvalStatus = $request->input('appr', 'N');
-
-    // Query to fetch requisitions where SHOP_ID matches and APPR_1 matches the provided status
+    // Fetch requisitions for the logged-in user's shop_id where APPR_1 = 'N'
     $requisitions = DB::table('REQ')
         ->select('ID', 'APPR_1')
         ->where('SHOP_ID', $shopId)
-        ->where('APPR_1', $approvalStatus)
+        ->where('APPR_1', 'N')
         ->get();
 
-    // Pass the shops, requisitions, selected shop ID, and approval status to the view
-    return view('requisitions.detail', compact('shops', 'requisitions', 'shopId', 'approvalStatus'));
+    // Pass the requisitions to the view
+    return view('requisitions.detail', compact('requisitions', 'shopId'));
 }
+
 
 
 // public function showDetails($id)
@@ -293,6 +310,10 @@ public function showRequisitionsByShop(Request $request)
 
 public function showDetails($id)
 {
+    if (!is_numeric($id)) {
+        return redirect()->back()->with('error', 'Invalid requisition ID.');
+    }
+
     // Fetch requisition details by REQ_ID from REQ_DET table
     $requisitionDetails = DB::table('REQ_DET')
         ->where('REQ_ID', $id)
@@ -324,16 +345,48 @@ public function updateDetails(Request $request, $id)
                 ]);
         }
 
-        return redirect()->route('requisitions.details', $id)->with('success', 'Details updated successfully.');
+        return redirect()->route('requisitions.byShop', $id)->with('success', 'Details updated successfully.');
     } catch (Exception $e) {
-        return redirect()->route('requisitions.details', $id)->with('error', 'Failed to update details: ' . $e->getMessage());
+        return redirect()->route('requisitions.byShop', $id)->with('error', 'Failed to update details: ' . $e->getMessage());
     }
 }
 
 
+// APPROVAL LOGIC
+
+
+public function showApprovalRequisitions()
+{
+    $shopId = auth()->user()->shop_id;
+
+    $requisitions = DB::table('REQ')
+        ->select('ID as id', 'APPR_1 as appr_1') // Alias columns to lowercase
+        ->where('SHOP_ID', $shopId)
+        ->get();
+
+    return view('requisitions.approval', compact('requisitions'));
+}
 
 
 
+public function updateApprovalStatus(Request $request)
+{
+    $shopId = auth()->user()->shop_id;
+
+    try {
+        // Loop through each requisition and update the approval status
+        foreach ($request->input('approval_status') as $requisitionId => $status) {
+            DB::table('REQ')
+                ->where('ID', $requisitionId)
+                ->where('SHOP_ID', $shopId)
+                ->update(['APPR_1' => $status]);
+        }
+
+        return redirect()->route('requisitions.approval')->with('success', 'Approval status updated successfully.');
+    } catch (Exception $e) {
+        return redirect()->route('requisitions.approval')->with('error', 'Failed to update approval status: ' . $e->getMessage());
+    }
+}
 
 
 

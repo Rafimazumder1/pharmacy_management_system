@@ -389,8 +389,38 @@ public function updateApprovalStatus(Request $request)
 }
 
 
+// Approval_2
 
+public function showApprovalRequisitionsForAppr2()
+{
+    $shopId = auth()->user()->shop_id;
 
+    $requisitions = DB::table('REQ')
+        ->select('ID as id', 'APPR_2 as appr_2') // Alias columns to lowercase
+        ->where('SHOP_ID', $shopId)
+        ->get();
+
+    return view('requisitions.approval_appr2', compact('requisitions'));
+}
+
+public function updateApprovalStatusForAppr2(Request $request)
+{
+    $shopId = auth()->user()->shop_id;
+
+    try {
+        // Loop through each requisition and update the approval status for APPR_2
+        foreach ($request->input('approval_status') as $requisitionId => $status) {
+            DB::table('REQ')
+                ->where('ID', $requisitionId)
+                ->where('SHOP_ID', $shopId)
+                ->update(['APPR_2' => $status]);
+        }
+
+        return redirect()->route('requisitions.approval_appr2')->with('success', 'Approval status updated successfully.');
+    } catch (Exception $e) {
+        return redirect()->route('requisitions.approval_appr2')->with('error', 'Failed to update approval status: ' . $e->getMessage());
+    }
+}
 
 
 

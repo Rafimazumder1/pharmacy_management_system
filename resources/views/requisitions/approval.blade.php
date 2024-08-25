@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h1>Approval Requisitions</h1>
+        <h1 class="text-center mb-5">Approval Requisitions</h1>
 
         @if($requisitions->isEmpty())
             <p>No requisitions found for approval.</p>
@@ -11,9 +11,9 @@
                 @csrf
 
                 <!-- Master dropdown to set all approval statuses -->
-                <div class="form-group d-flex align-items-center">
-                    <label for="masterApprovalStatus" class="mr-2">Set All Approval Status:</label>
-                    <select id="masterApprovalStatus" class="form-control mr-2" onchange="setAllApprovalStatuses(this.value)">
+                <div class="form-group d-flex align-items-center mb-5 " >
+                    <label for="masterApprovalStatus" class="mr-2"><h3>Set All Approval Status:</h3></label>
+                    <select id="masterApprovalStatus" class="form-control mr-2" style="width: 600px;" onchange="setAllApprovalStatuses(this.value)">
                         <option value="">Set All Approval Status...</option>
                         <option value="Y">Yes</option>
                         <option value="N">No</option>

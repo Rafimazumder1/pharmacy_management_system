@@ -200,6 +200,15 @@
                     </span>
                 </a>
             </li>
+            <li class="<?php echo e(active_if_full_match('requisitions/approval')); ?>">
+                <a class="d-flex align-items-center" href="<?php echo e(route('requisitions.approval_appr2')); ?>">
+                    <i data-feather="circle"></i>
+                    <span class="menu-item text-truncate" data-i18n="Approval_2">
+                        <?php echo e(__('Approval_2')); ?>
+
+                    </span>
+                </a>
+            </li>
         </ul>
     </li>
 <?php endif; ?>

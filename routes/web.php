@@ -201,6 +201,8 @@ Route::post('/requisitions/approval/update', [RequisitionController::class, 'upd
 //     return 'Route is working';
 // });
             
+Route::get('/req/approvalappr2', [RequisitionController::class, 'showApprovalRequisitionsForAppr2'])->name('requisitions.approval_appr2');
+Route::post('/requisitions/approval_appr2/update', [RequisitionController::class, 'updateApprovalStatusForAppr2'])->name('requisitions.updateApproval_appr2');
 
 
 

@@ -196,6 +196,14 @@
                     </span>
                 </a>
             </li>
+            <li class="{{ active_if_full_match('requisitions/approval') }}">
+                <a class="d-flex align-items-center" href="{{ route('requisitions.approval_appr2') }}">
+                    <i data-feather="circle"></i>
+                    <span class="menu-item text-truncate" data-i18n="Approval_2">
+                        {{ __('Approval_2') }}
+                    </span>
+                </a>
+            </li>
         </ul>
     </li>
 @endif
